@@ -38,3 +38,25 @@ def test_compute_pitching_metrics_keys(pitching_df):
 def test_whiff_pct_calculation(pitching_df):
     m = charts.compute_pitching_metrics(pitching_df)
     assert 0.0 <= m["whiff_pct"] <= 100.0
+
+
+def test_batting_ev_distribution_returns_figure(batting_df):
+    fig = charts.batting_ev_distribution(batting_df)
+    assert isinstance(fig, go.Figure)
+    assert len(fig.data) >= 1
+
+
+def test_batting_ev_distribution_empty_df():
+    fig = charts.batting_ev_distribution(pd.DataFrame(columns=["launch_speed"]))
+    assert isinstance(fig, go.Figure)
+
+
+def test_batting_launch_ev_scatter_returns_figure(batting_df):
+    fig = charts.batting_launch_ev_scatter(batting_df)
+    assert isinstance(fig, go.Figure)
+    assert len(fig.data) >= 1
+
+
+def test_batting_launch_ev_scatter_has_sweet_spot_shape(batting_df):
+    fig = charts.batting_launch_ev_scatter(batting_df)
+    assert len(fig.layout.shapes) >= 1

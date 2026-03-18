@@ -119,3 +119,103 @@ def compute_pitching_metrics(df: pd.DataFrame) -> dict:
         "avg_spin": round(spin.mean(), 0) if not spin.empty else None,
         "whiff_pct": whiff_pct,
     }
+
+
+def batting_ev_distribution(df: pd.DataFrame) -> go.Figure:
+    ev = df["launch_speed"].dropna() if "launch_speed" in df.columns else pd.Series(dtype=float)
+    fig = go.Figure()
+    if ev.empty:
+        return fig.update_layout(**_base_layout("Exit Velocity Distribution"))
+
+    fig.add_trace(go.Histogram(
+        x=ev, xbins=dict(size=2),
+        marker_color="#2563eb", opacity=0.85,
+        hovertemplate="EV: %{x} mph<br>Count: %{y}<extra></extra>",
+        name="",
+    ))
+
+    avg = ev.mean()
+    fig.add_vline(x=avg, line_dash="dash", line_color=THEME["ref_line"], line_width=1.5,
+                  annotation_text=f"Avg {avg:.1f}", annotation_position="top right",
+                  annotation_font=dict(size=9, color=THEME["ref_line"]))
+    fig.add_vline(x=95, line_dash="dot", line_color="#ef4444", line_width=1,
+                  annotation_text="95 mph", annotation_position="top left",
+                  annotation_font=dict(size=9, color="#ef4444"))
+
+    layout = _base_layout("Exit Velocity Distribution")
+    layout["xaxis"]["title"] = dict(text="Exit Velocity (mph)", font=dict(size=10, color=THEME["axis_title"]))
+    layout["yaxis"]["title"] = dict(text="Batted Balls", font=dict(size=10, color=THEME["axis_title"]))
+    layout["showlegend"] = False
+    fig.update_layout(**layout)
+    return fig
+
+
+def batting_launch_ev_scatter(df: pd.DataFrame) -> go.Figure:
+    needed = {"launch_angle", "launch_speed"}
+    if not needed.issubset(df.columns) or df.empty:
+        return go.Figure().update_layout(**_base_layout("Launch Angle vs Exit Velocity"))
+
+    data = df[df["launch_speed"].notna() & df["launch_angle"].notna()].copy()
+
+    fig = go.Figure()
+    for label, events_list, marker_size in [
+        ("Out",    None,                              5),
+        ("Single", ["single"],                        6),
+        ("XBH",    ["double", "triple"],              7),
+        ("HR",     ["home_run"],                      8),
+    ]:
+        if events_list is None:
+            mask = ~data["events"].isin(["home_run", "double", "triple", "single"])
+        else:
+            mask = data["events"].isin(events_list)
+
+        color = (THEME["out_fill"] if label == "Out"
+                 else OUTCOME_COLORS["single"] if label == "Single"
+                 else THEME["xbh"] if label == "XBH"
+                 else OUTCOME_COLORS["home_run"])
+
+        subset = data[mask]
+        if subset.empty:
+            continue
+
+        fig.add_trace(go.Scatter(
+            x=subset["launch_angle"], y=subset["launch_speed"],
+            mode="markers",
+            marker=dict(
+                color=color,
+                size=marker_size,
+                opacity=0.8,
+                line=dict(color=THEME["axis"], width=0.5) if label == "Out" else dict(width=0),
+            ),
+            name=label,
+            hovertemplate="LA: %{x:.1f}°<br>EV: %{y:.1f} mph<extra></extra>",
+        ))
+
+    fig.add_shape(
+        type="rect", x0=8, x1=32,
+        y0=95, y1=data["launch_speed"].max() + 5,
+        fillcolor="rgba(34,197,94,0.05)",
+        line=dict(color="rgba(34,197,94,0.28)", width=1, dash="dot"),
+    )
+
+    fig.add_annotation(
+        x=32, y=95 + (data["launch_speed"].max() + 5 - 95) / 2,
+        xref="x", yref="y",
+        text="Sweet Spot<br><span style='font-size:9px;color:rgba(74,222,128,0.5)'>8–32° · ≥95 mph</span>",
+        showarrow=True,
+        arrowhead=0,
+        arrowcolor="rgba(74,222,128,0.35)",
+        arrowwidth=1,
+        ax=50, ay=0,
+        font=dict(size=9, color="rgba(74,222,128,0.75)"),
+        align="left",
+        xanchor="left",
+    )
+
+    layout = _base_layout("Launch Angle vs Exit Velocity")
+    layout["xaxis"]["title"] = dict(text="Launch Angle (°)", font=dict(size=10, color=THEME["axis_title"]))
+    layout["yaxis"]["title"] = dict(text="Exit Velocity (mph)", font=dict(size=10, color=THEME["axis_title"]))
+    layout["xaxis"]["tickvals"] = [-20, 10, 40]
+    layout["yaxis"]["tickvals"] = [70, 95, 115]
+    fig.update_layout(**layout)
+    return fig

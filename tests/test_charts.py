@@ -12,12 +12,6 @@ def test_transform_spray_coords(batting_df):
     assert result["spray_y"].between(-50, 420).all()
 
 
-def test_rolling_xwoba_returns_series(batting_df):
-    result = charts.rolling_xwoba(batting_df, window=10)
-    assert isinstance(result, pd.Series)
-    assert len(result) == len(batting_df.dropna(subset=["estimated_woba_using_speedangle"]))
-    assert result.notna().sum() > 0
-
 
 def test_compute_batting_metrics_keys(batting_df):
     m = charts.compute_batting_metrics(batting_df)

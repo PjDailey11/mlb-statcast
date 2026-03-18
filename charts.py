@@ -5,17 +5,17 @@ import plotly.express as px
 
 THEME = {
     "bg": "#0d1117",
-    "grid": "#1a2332",
-    "axis": "#2d3f52",
-    "tick": "#475569",
-    "axis_title": "#64748b",
-    "subtitle": "#64748b",
+    "grid": "#111827",
+    "axis": "#1e2d45",
+    "tick": "#334155",
+    "axis_title": "#475569",
+    "subtitle": "#475569",
     "hr": "#f87171",
     "xbh": "#fb923c",
     "single": "#4ade80",
-    "out_fill": "#1e293b",
-    "out_border": "#475569",
-    "ref_line": "#f97316",
+    "out_fill": "#0f172a",
+    "out_border": "#334155",
+    "ref_line": "#3b82f6",
     "pitch_colors": px.colors.qualitative.D3,
 }
 
@@ -39,27 +39,33 @@ def _base_layout(title: str = "", height: int = 340) -> dict:
         height=height,
         paper_bgcolor=THEME["bg"],
         plot_bgcolor=THEME["bg"],
-        font=dict(color=THEME["tick"], family="system-ui"),
-        title=dict(text=title, font=dict(size=13, color="#94a3b8"), x=0, xanchor="left"),
-        margin=dict(l=60, r=20, t=40, b=50),
+        font=dict(color=THEME["tick"], family="Inter, system-ui, sans-serif"),
+        title=dict(
+            text=title,
+            font=dict(size=12, color="#64748b", family="Inter, system-ui, sans-serif"),
+            x=0, xanchor="left",
+        ),
+        margin=dict(l=56, r=16, t=36, b=44),
         legend=dict(
             bgcolor="rgba(0,0,0,0)",
             borderwidth=0,
-            font=dict(size=10, color="#94a3b8"),
+            font=dict(size=10, color="#64748b", family="Inter, system-ui, sans-serif"),
         ),
         xaxis=dict(
             gridcolor=THEME["grid"],
             linecolor=THEME["axis"],
             tickcolor=THEME["axis"],
-            tickfont=dict(size=9, color=THEME["tick"]),
+            tickfont=dict(size=9, color=THEME["tick"], family="JetBrains Mono, monospace"),
             nticks=3,
+            showgrid=False,
         ),
         yaxis=dict(
             gridcolor=THEME["grid"],
-            linecolor=THEME["axis"],
+            linecolor="rgba(0,0,0,0)",
             tickcolor=THEME["axis"],
-            tickfont=dict(size=9, color=THEME["tick"]),
+            tickfont=dict(size=9, color=THEME["tick"], family="JetBrains Mono, monospace"),
             nticks=3,
+            showgrid=True,
         ),
     )
 
@@ -82,16 +88,9 @@ def transform_spray_coords(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def rolling_xwoba(df: pd.DataFrame, window: int = 30) -> pd.Series:
-    col = "estimated_woba_using_speedangle"
-    pa = df[df[col].notna()].copy()
-    pa = pa.sort_values("game_date")
-    return pa[col].rolling(window, min_periods=5).mean().reset_index(drop=True)
-
-
 def compute_batting_metrics(df: pd.DataFrame) -> dict:
-    ev = df["launch_speed"] if "launch_speed" in df.columns else pd.Series(dtype=float)
-    xwoba_col = df["estimated_woba_using_speedangle"] if "estimated_woba_using_speedangle" in df.columns else pd.Series(dtype=float)
+    ev = df["launch_speed"].dropna() if "launch_speed" in df.columns else pd.Series(dtype=float)
+    xwoba_col = df["estimated_woba_using_speedangle"].dropna() if "estimated_woba_using_speedangle" in df.columns else pd.Series(dtype=float)
     barrel_pct = None
     if "barrel" in df.columns:
         valid_barrels = df["barrel"].dropna()
@@ -106,8 +105,8 @@ def compute_batting_metrics(df: pd.DataFrame) -> dict:
 
 
 def compute_pitching_metrics(df: pd.DataFrame) -> dict:
-    velo = df["release_speed"] if "release_speed" in df.columns else pd.Series(dtype=float)
-    spin = df["release_spin_rate"] if "release_spin_rate" in df.columns else pd.Series(dtype=float)
+    velo = df["release_speed"].dropna() if "release_speed" in df.columns else pd.Series(dtype=float)
+    spin = df["release_spin_rate"].dropna() if "release_spin_rate" in df.columns else pd.Series(dtype=float)
     whiff_pct = None
     if "description" in df.columns:
         desc = df["description"].dropna()
@@ -156,6 +155,10 @@ def batting_launch_ev_scatter(df: pd.DataFrame) -> go.Figure:
         return go.Figure().update_layout(**_base_layout("Launch Angle vs Exit Velocity"))
 
     data = df[df["launch_speed"].notna() & df["launch_angle"].notna()].copy()
+    if data.empty:
+        return go.Figure().update_layout(**_base_layout("Launch Angle vs Exit Velocity"))
+    if len(data) > 800:
+        data = data.sample(800, random_state=42)
 
     fig = go.Figure()
     for label, events_list, marker_size in [
@@ -252,6 +255,8 @@ def batting_spray_chart(df: pd.DataFrame) -> go.Figure:
     spray = transform_spray_coords(df[df["hc_x"].notna() & df["hc_y"].notna()].copy())
     if spray.empty:
         return fig.update_layout(**_base_layout("Spray Chart"))
+    if len(spray) > 800:
+        spray = spray.sample(800, random_state=42)
 
     for label, color, size, events_filter in [
         ("Out",  THEME["out_fill"],         5, None),
@@ -385,6 +390,8 @@ def pitching_velocity_by_type(df: pd.DataFrame) -> go.Figure:
         return fig.update_layout(**_base_layout("Velocity by Pitch Type"))
 
     df2 = df[df["release_speed"].notna() & df["pitch_type"].notna()].copy()
+    if len(df2) > 1000:
+        df2 = df2.sample(1000, random_state=42)
     df2["pitch_label"] = _label_pitch_types(df2["pitch_type"])
 
     for i, label in enumerate(df2["pitch_label"].unique()):

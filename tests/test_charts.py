@@ -105,3 +105,26 @@ def test_batting_hit_distance_only_hit_events(batting_df):
                 x_vals.add(trace.name)
         allowed = {"Single", "Double", "Triple", "Home Run", ""}
         assert x_vals.issubset(allowed)
+
+
+def test_pitching_pitch_usage_returns_figure(pitching_df):
+    fig = charts.pitching_pitch_usage(pitching_df)
+    assert isinstance(fig, go.Figure)
+    assert len(fig.data) >= 1
+
+
+def test_pitching_velocity_by_type_returns_figure(pitching_df):
+    fig = charts.pitching_velocity_by_type(pitching_df)
+    assert isinstance(fig, go.Figure)
+    assert len(fig.data) >= 1
+
+
+def test_pitching_movement_profile_returns_figure(pitching_df):
+    fig = charts.pitching_movement_profile(pitching_df)
+    assert isinstance(fig, go.Figure)
+    assert len(fig.data) >= 1
+
+
+def test_pitching_movement_profile_has_crosshairs(pitching_df):
+    fig = charts.pitching_movement_profile(pitching_df)
+    assert len(fig.layout.shapes) >= 2

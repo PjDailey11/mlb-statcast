@@ -352,6 +352,103 @@ def batting_hit_distance(df: pd.DataFrame) -> go.Figure:
     return fig
 
 
+def pitching_pitch_usage(df: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+    if "pitch_type" not in df.columns or df.empty:
+        return fig.update_layout(**_base_layout("Pitch Type Usage"))
+
+    counts = df["pitch_type"].dropna().map(lambda p: PITCH_NAMES.get(p, p)).value_counts()
+    if counts.empty:
+        return fig.update_layout(**_base_layout("Pitch Type Usage"))
+
+    fig.add_trace(go.Pie(
+        labels=counts.index.tolist(),
+        values=counts.values.tolist(),
+        hole=0.4,
+        textposition="outside",
+        textinfo="label+percent",
+        textfont=dict(size=9, color="#94a3b8"),
+        marker=dict(colors=THEME["pitch_colors"][:len(counts)]),
+        showlegend=False,
+    ))
+
+    layout = _base_layout("Pitch Type Usage")
+    layout["margin"] = dict(l=40, r=40, t=40, b=40)
+    fig.update_layout(**layout)
+    return fig
+
+
+def pitching_velocity_by_type(df: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+    needed = {"release_speed", "pitch_type"}
+    if not needed.issubset(df.columns) or df.empty:
+        return fig.update_layout(**_base_layout("Velocity by Pitch Type"))
+
+    df2 = df[df["release_speed"].notna() & df["pitch_type"].notna()].copy()
+    df2["pitch_label"] = _label_pitch_types(df2["pitch_type"])
+
+    for i, label in enumerate(df2["pitch_label"].unique()):
+        sub = df2[df2["pitch_label"] == label]["release_speed"]
+        color = THEME["pitch_colors"][i % len(THEME["pitch_colors"])]
+        if color.startswith("rgb("):
+            fill = color.replace("rgb(", "rgba(").replace(")", ", 0.15)")
+        else:
+            fill = color
+        fig.add_trace(go.Violin(
+            y=sub, name=label,
+            box_visible=True,
+            meanline_visible=True,
+            line_color=color,
+            fillcolor=fill,
+            opacity=0.8,
+        ))
+
+    layout = _base_layout("Velocity by Pitch Type")
+    layout["xaxis"]["title"] = dict(text="Pitch Type", font=dict(size=10, color=THEME["axis_title"]))
+    layout["yaxis"]["title"] = dict(text="Velocity (mph)", font=dict(size=10, color=THEME["axis_title"]))
+    layout["violingap"] = 0.3
+    fig.update_layout(**layout)
+    return fig
+
+
+def pitching_movement_profile(df: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+    needed = {"pfx_x", "pfx_z", "pitch_type"}
+    if not needed.issubset(df.columns) or df.empty:
+        return fig.update_layout(**_base_layout("Movement Profile"))
+
+    df2 = df[df["pfx_x"].notna() & df["pfx_z"].notna()].copy()
+    df2["hmov"] = df2["pfx_x"] * 12
+    df2["vmov"] = df2["pfx_z"] * 12
+    df2["pitch_label"] = _label_pitch_types(df2["pitch_type"])
+
+    for i, label in enumerate(df2["pitch_label"].unique()):
+        sub = df2[df2["pitch_label"] == label]
+        color = THEME["pitch_colors"][i % len(THEME["pitch_colors"])]
+        fig.add_trace(go.Scatter(
+            x=sub["hmov"], y=sub["vmov"],
+            mode="markers",
+            marker=dict(color=color, size=5, opacity=0.65),
+            name=label,
+            hovertemplate="H: %{x:.1f}\"<br>V: %{y:.1f}\"<extra></extra>",
+        ))
+
+    fig.add_hline(y=0, line_color=THEME["axis"], line_width=1)
+    fig.add_vline(x=0, line_color=THEME["axis"], line_width=1)
+
+    layout = _base_layout("Movement Profile (Catcher's POV)")
+    layout["xaxis"].update(
+        range=[-24, 24],
+        title=dict(text="Horizontal Break (in)", font=dict(size=10, color=THEME["axis_title"]))
+    )
+    layout["yaxis"].update(
+        range=[-20, 30],
+        title=dict(text="Vertical Break (in)", font=dict(size=10, color=THEME["axis_title"]))
+    )
+    fig.update_layout(**layout)
+    return fig
+
+
 def batting_xwoba_trend(df: pd.DataFrame) -> go.Figure:
     fig = go.Figure()
     col = "estimated_woba_using_speedangle"

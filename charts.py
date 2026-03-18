@@ -66,3 +66,47 @@ def _base_layout(title: str = "", height: int = 340) -> dict:
 
 def _label_pitch_types(series: pd.Series) -> pd.Series:
     return series.map(lambda p: PITCH_NAMES.get(p, p) if pd.notna(p) else p)
+
+
+def transform_spray_coords(df: pd.DataFrame) -> pd.DataFrame:
+    out = df.copy()
+    out["spray_x"] = df["hc_x"] - 125.42
+    out["spray_y"] = 198.27 - df["hc_y"]
+    return out
+
+
+def rolling_xwoba(df: pd.DataFrame, window: int = 30) -> pd.Series:
+    col = "estimated_woba_using_speedangle"
+    pa = df[df[col].notna()].copy()
+    pa = pa.sort_values("game_date")
+    return pa[col].rolling(window, min_periods=5).mean().reset_index(drop=True)
+
+
+def compute_batting_metrics(df: pd.DataFrame) -> dict:
+    ev = df["launch_speed"] if "launch_speed" in df.columns else pd.Series(dtype=float)
+    xwoba_col = df["estimated_woba_using_speedangle"] if "estimated_woba_using_speedangle" in df.columns else pd.Series(dtype=float)
+    barrel_pct = None
+    if "barrel" in df.columns and len(df) > 0:
+        barrel_pct = df["barrel"].sum() / len(df) * 100
+    return {
+        "avg_ev": round(ev.mean(), 1) if not ev.empty else None,
+        "max_ev": round(ev.max(), 1) if not ev.empty else None,
+        "barrel_pct": round(barrel_pct, 1) if barrel_pct is not None else None,
+        "xwoba": round(xwoba_col.mean(), 3) if not xwoba_col.empty else None,
+    }
+
+
+def compute_pitching_metrics(df: pd.DataFrame) -> dict:
+    velo = df["release_speed"] if "release_speed" in df.columns else pd.Series(dtype=float)
+    spin = df["release_spin_rate"] if "release_spin_rate" in df.columns else pd.Series(dtype=float)
+    whiff_pct = None
+    if "description" in df.columns:
+        desc = df["description"].dropna()
+        if len(desc) > 0:
+            whiff_pct = round((desc == "swinging_strike").sum() / len(desc) * 100, 1)
+    return {
+        "avg_velo": round(velo.mean(), 1) if not velo.empty else None,
+        "max_velo": round(velo.max(), 1) if not velo.empty else None,
+        "avg_spin": round(spin.mean(), 0) if not spin.empty else None,
+        "whiff_pct": whiff_pct,
+    }

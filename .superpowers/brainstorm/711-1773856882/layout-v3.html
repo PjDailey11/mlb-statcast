@@ -1,0 +1,195 @@
+<h2>Elegant Chart Revision</h2>
+<p class="subtitle">Reduced clutter — minimal axes, generous spacing, subtle grid, clean color palette.</p>
+
+<div class="split">
+
+  <!-- Spray Chart -->
+  <div class="mockup">
+    <div class="mockup-header">Spray Chart</div>
+    <div class="mockup-body" style="background:#0d1117;display:flex;flex-direction:column;align-items:center;padding:24px 20px 16px">
+      <div style="color:#94a3b8;font-size:11px;font-family:monospace;margin-bottom:12px;letter-spacing:0.05em">SHOHEI OHTANI · 2024 · 187 BATTED BALLS</div>
+      <svg width="280" height="260" viewBox="0 0 280 260" style="overflow:visible">
+        <defs>
+          <radialGradient id="grass" cx="50%" cy="90%" r="75%">
+            <stop offset="0%" style="stop-color:#14532d;stop-opacity:0.18"/>
+            <stop offset="100%" style="stop-color:#0d1117;stop-opacity:0"/>
+          </radialGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="1.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Grass fill -->
+        <ellipse cx="140" cy="220" rx="135" ry="155" fill="url(#grass)"/>
+
+        <!-- Outfield warning track arc -->
+        <path d="M 18 222 Q 140 14 262 222" fill="none" stroke="rgba(100,116,139,0.2)" stroke-width="1"/>
+
+        <!-- Foul lines — thin, muted -->
+        <line x1="140" y1="225" x2="18" y2="55" stroke="rgba(100,116,139,0.35)" stroke-width="1"/>
+        <line x1="140" y1="225" x2="262" y2="55" stroke="rgba(100,116,139,0.35)" stroke-width="1"/>
+
+        <!-- Diamond — clean minimal outline -->
+        <polygon points="140,165 104,131 140,97 176,131"
+          fill="rgba(250,204,21,0.05)"
+          stroke="rgba(250,204,21,0.4)"
+          stroke-width="1.2"/>
+
+        <!-- Base squares -->
+        <rect x="137" y="93" width="6" height="6" fill="rgba(250,204,21,0.6)" rx="1"/>
+        <rect x="100" y="128" width="6" height="6" fill="rgba(250,204,21,0.6)" rx="1"/>
+        <rect x="174" y="128" width="6" height="6" fill="rgba(250,204,21,0.6)" rx="1"/>
+        <!-- Home plate -->
+        <polygon points="140,228 135,220 140,216 145,220" fill="rgba(255,255,255,0.5)"/>
+
+        <!-- Outs — small, muted gray -->
+        <circle cx="148" cy="155" r="3" fill="#334155" opacity="0.8"/>
+        <circle cx="132" cy="150" r="3" fill="#334155" opacity="0.8"/>
+        <circle cx="155" cy="168" r="3" fill="#334155" opacity="0.8"/>
+        <circle cx="125" cy="162" r="3" fill="#334155" opacity="0.8"/>
+        <circle cx="160" cy="178" r="3" fill="#334155" opacity="0.8"/>
+        <circle cx="120" cy="175" r="3" fill="#334155" opacity="0.8"/>
+        <circle cx="165" cy="190" r="3" fill="#334155" opacity="0.8"/>
+        <circle cx="115" cy="188" r="3" fill="#334155" opacity="0.8"/>
+        <circle cx="170" cy="145" r="3" fill="#334155" opacity="0.8"/>
+        <circle cx="108" cy="145" r="3" fill="#334155" opacity="0.8"/>
+
+        <!-- Singles/doubles — medium green -->
+        <circle cx="110" cy="128" r="4" fill="#4ade80" opacity="0.75"/>
+        <circle cx="168" cy="120" r="4" fill="#4ade80" opacity="0.75"/>
+        <circle cx="130" cy="108" r="4" fill="#4ade80" opacity="0.75"/>
+        <circle cx="156" cy="105" r="4" fill="#4ade80" opacity="0.75"/>
+        <circle cx="95"  cy="115" r="4" fill="#4ade80" opacity="0.75"/>
+        <circle cx="185" cy="118" r="4" fill="#4ade80" opacity="0.75"/>
+        <circle cx="78"  cy="140" r="4" fill="#4ade80" opacity="0.75"/>
+        <circle cx="200" cy="135" r="4" fill="#4ade80" opacity="0.75"/>
+        <circle cx="140" cy="90"  r="4" fill="#4ade80" opacity="0.75"/>
+        <circle cx="215" cy="150" r="4" fill="#4ade80" opacity="0.75"/>
+
+        <!-- Home runs — bright red, glowing, slightly larger -->
+        <circle cx="68"  cy="88"  r="5.5" fill="#f87171" opacity="0.9" filter="url(#glow)"/>
+        <circle cx="215" cy="82"  r="5.5" fill="#f87171" opacity="0.9" filter="url(#glow)"/>
+        <circle cx="140" cy="42"  r="5.5" fill="#f87171" opacity="0.9" filter="url(#glow)"/>
+        <circle cx="48"  cy="105" r="5.5" fill="#f87171" opacity="0.9" filter="url(#glow)"/>
+        <circle cx="240" cy="100" r="5.5" fill="#f87171" opacity="0.9" filter="url(#glow)"/>
+
+        <!-- Minimal legend — bottom left -->
+        <circle cx="14" cy="245" r="5" fill="#f87171"/>
+        <text x="24" y="249" fill="#94a3b8" font-size="9" font-family="system-ui">HR</text>
+        <circle cx="52" cy="245" r="4" fill="#4ade80"/>
+        <text x="62" y="249" fill="#94a3b8" font-size="9" font-family="system-ui">Hit</text>
+        <circle cx="88" cy="245" r="3" fill="#334155"/>
+        <text x="98" y="249" fill="#94a3b8" font-size="9" font-family="system-ui">Out</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Launch Angle vs Exit Velo -->
+  <div class="mockup">
+    <div class="mockup-header">Launch Angle vs Exit Velocity</div>
+    <div class="mockup-body" style="background:#0d1117;padding:24px 24px 16px">
+      <div style="color:#94a3b8;font-size:11px;font-family:monospace;margin-bottom:16px;letter-spacing:0.05em">SHOHEI OHTANI · 2024 · BATTED BALL OUTCOMES</div>
+      <svg width="320" height="240" viewBox="0 0 320 240" style="overflow:visible">
+        <defs>
+          <clipPath id="cp"><rect x="38" y="8" width="272" height="190"/></clipPath>
+        </defs>
+
+        <!-- Very subtle grid — just 3 horizontal lines -->
+        <line x1="38" y1="103" x2="310" y2="103" stroke="#1e293b" stroke-width="1"/>
+        <line x1="38" y1="56"  x2="310" y2="56"  stroke="#1e293b" stroke-width="1"/>
+        <line x1="38" y1="198" x2="310" y2="198" stroke="#1e293b" stroke-width="1"/>
+
+        <!-- Axes -->
+        <line x1="38" y1="8"   x2="38"  y2="198" stroke="#334155" stroke-width="1.2"/>
+        <line x1="38" y1="198" x2="310" y2="198" stroke="#334155" stroke-width="1.2"/>
+
+        <!-- Y axis — 3 ticks only (70, 95, 115 mph) -->
+        <text x="30" y="201" fill="#475569" font-size="9" font-family="monospace" text-anchor="end">70</text>
+        <text x="30" y="106" fill="#475569" font-size="9" font-family="monospace" text-anchor="end">95</text>
+        <text x="30" y="59"  fill="#475569" font-size="9" font-family="monospace" text-anchor="end">115</text>
+
+        <!-- X axis — 3 ticks only (-20°, 10°, 40°) -->
+        <text x="60"  y="212" fill="#475569" font-size="9" font-family="monospace" text-anchor="middle">-20°</text>
+        <text x="174" y="212" fill="#475569" font-size="9" font-family="monospace" text-anchor="middle">10°</text>
+        <text x="288" y="212" fill="#475569" font-size="9" font-family="monospace" text-anchor="middle">40°</text>
+
+        <!-- Axis labels — single, unobtrusive -->
+        <text x="174" y="228" fill="#64748b" font-size="10" font-family="system-ui" text-anchor="middle">Launch Angle (°)</text>
+        <text x="10" y="103" fill="#64748b" font-size="10" font-family="system-ui" text-anchor="middle" transform="rotate(-90,10,103)">Exit Velocity (mph)</text>
+
+        <!-- Sweet Spot zone — soft, barely-there fill, dashed border -->
+        <!-- 8°–32° → x 141–233 ; ≥95 mph → y ≤103 -->
+        <rect x="141" y="8" width="92" height="95" rx="4"
+          fill="rgba(34,197,94,0.05)"
+          stroke="rgba(34,197,94,0.3)"
+          stroke-width="1"
+          stroke-dasharray="5,4"/>
+        <!-- Single small label, top-center of zone -->
+        <text x="187" y="20" fill="rgba(34,197,94,0.55)" font-size="8.5" font-family="system-ui" text-anchor="middle">Sweet Spot</text>
+
+        <!-- Scatter dots — clipped -->
+        <g clip-path="url(#cp)">
+          <!-- HRs — red, largest -->
+          <circle cx="192" cy="20"  r="6" fill="#f87171" opacity="0.9"/>
+          <circle cx="210" cy="28"  r="6" fill="#f87171" opacity="0.9"/>
+          <circle cx="175" cy="18"  r="6" fill="#f87171" opacity="0.9"/>
+          <circle cx="225" cy="35"  r="6" fill="#f87171" opacity="0.9"/>
+
+          <!-- XBH — orange, medium -->
+          <circle cx="165" cy="65"  r="5" fill="#fb923c" opacity="0.8"/>
+          <circle cx="195" cy="58"  r="5" fill="#fb923c" opacity="0.8"/>
+          <circle cx="215" cy="72"  r="5" fill="#fb923c" opacity="0.8"/>
+
+          <!-- Singles — green, small -->
+          <circle cx="155" cy="95"  r="4" fill="#4ade80" opacity="0.75"/>
+          <circle cx="178" cy="88"  r="4" fill="#4ade80" opacity="0.75"/>
+          <circle cx="200" cy="93"  r="4" fill="#4ade80" opacity="0.75"/>
+          <circle cx="130" cy="110" r="4" fill="#4ade80" opacity="0.75"/>
+          <circle cx="110" cy="118" r="4" fill="#4ade80" opacity="0.75"/>
+
+          <!-- Ground balls — muted, low angle -->
+          <circle cx="68"  cy="130" r="3.5" fill="#475569" opacity="0.7"/>
+          <circle cx="52"  cy="150" r="3.5" fill="#475569" opacity="0.7"/>
+          <circle cx="85"  cy="140" r="3.5" fill="#475569" opacity="0.7"/>
+          <circle cx="42"  cy="165" r="3.5" fill="#475569" opacity="0.7"/>
+          <circle cx="70"  cy="158" r="3.5" fill="#475569" opacity="0.7"/>
+          <circle cx="95"  cy="148" r="3.5" fill="#475569" opacity="0.7"/>
+
+          <!-- Pop-ups — muted, high angle, low velo -->
+          <circle cx="260" cy="155" r="3.5" fill="#475569" opacity="0.65"/>
+          <circle cx="278" cy="145" r="3.5" fill="#475569" opacity="0.65"/>
+          <circle cx="248" cy="162" r="3.5" fill="#475569" opacity="0.65"/>
+
+          <!-- Misc outs -->
+          <circle cx="120" cy="138" r="3.5" fill="#475569" opacity="0.65"/>
+          <circle cx="142" cy="145" r="3.5" fill="#475569" opacity="0.65"/>
+          <circle cx="235" cy="120" r="3.5" fill="#475569" opacity="0.65"/>
+          <circle cx="250" cy="108" r="4" fill="#4ade80" opacity="0.7"/>
+        </g>
+
+        <!-- Compact legend — single row -->
+        <circle cx="50"  cy="230" r="5.5" fill="#f87171"/>
+        <text x="60"  y="234" fill="#94a3b8" font-size="9" font-family="system-ui">HR</text>
+        <circle cx="86"  cy="230" r="5"   fill="#fb923c"/>
+        <text x="96"  y="234" fill="#94a3b8" font-size="9" font-family="system-ui">XBH</text>
+        <circle cx="130" cy="230" r="4"   fill="#4ade80"/>
+        <text x="140" y="234" fill="#94a3b8" font-size="9" font-family="system-ui">Single</text>
+        <circle cx="182" cy="230" r="3.5" fill="#475569"/>
+        <text x="192" y="234" fill="#94a3b8" font-size="9" font-family="system-ui">Out</text>
+      </svg>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:16px;padding:12px 16px;background:#111827;border-radius:6px;border:1px solid #1e293b">
+  <div style="color:#64748b;font-size:11px;font-family:monospace;line-height:1.8">
+    Design principles applied to all 6 charts:<br>
+    · 3 axis ticks max — no clutter<br>
+    · Subtle grid (1-2 lines), dark background<br>
+    · Color encodes outcome, size encodes severity<br>
+    · Single compact legend row per chart<br>
+    · One descriptive subtitle per chart (player · season · context)
+  </div>
+</div>

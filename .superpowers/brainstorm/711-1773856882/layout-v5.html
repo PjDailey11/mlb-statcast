@@ -1,0 +1,108 @@
+<h2>Sweet Spot Label — Moved Outside Zone</h2>
+<p class="subtitle">Label now sits to the right of the zone with a small callout line, clear of all data points.</p>
+
+<div style="display:flex;justify-content:center">
+  <div class="mockup" style="max-width:420px;width:100%">
+    <div class="mockup-header">Launch Angle vs Exit Velocity</div>
+    <div class="mockup-body" style="background:#0d1117;padding:20px 20px 20px">
+
+      <div style="color:#64748b;font-size:10px;font-family:monospace;letter-spacing:0.08em;margin-bottom:14px;text-align:center">
+        SHOHEI OHTANI &nbsp;·&nbsp; 2024 SEASON &nbsp;·&nbsp; BATTED BALL OUTCOMES
+      </div>
+
+      <!-- Extra right padding in viewBox to accommodate side label -->
+      <svg width="360" height="230" viewBox="0 0 360 230">
+        <defs>
+          <clipPath id="cp3"><rect x="52" y="10" width="252" height="168"/></clipPath>
+        </defs>
+
+        <!-- Grid -->
+        <line x1="52" y1="94"  x2="304" y2="94"  stroke="#1a2332" stroke-width="1"/>
+        <line x1="52" y1="52"  x2="304" y2="52"  stroke="#1a2332" stroke-width="1"/>
+        <line x1="52" y1="136" x2="304" y2="136" stroke="#1a2332" stroke-width="1"/>
+
+        <!-- Axes -->
+        <line x1="52" y1="10"  x2="52"  y2="178" stroke="#2d3f52" stroke-width="1.5"/>
+        <line x1="52" y1="178" x2="304" y2="178" stroke="#2d3f52" stroke-width="1.5"/>
+
+        <!-- Y ticks -->
+        <text x="44" y="157" fill="#475569" font-size="9.5" font-family="monospace" text-anchor="end">70</text>
+        <text x="44" y="98"  fill="#475569" font-size="9.5" font-family="monospace" text-anchor="end">95</text>
+        <text x="44" y="56"  fill="#475569" font-size="9.5" font-family="monospace" text-anchor="end">115</text>
+        <text x="11" y="94"  fill="#64748b" font-size="10" font-family="system-ui" text-anchor="middle" transform="rotate(-90,11,94)">Exit Velocity (mph)</text>
+
+        <!-- X ticks -->
+        <text x="76"  y="192" fill="#475569" font-size="9.5" font-family="monospace" text-anchor="middle">−20°</text>
+        <text x="178" y="192" fill="#475569" font-size="9.5" font-family="monospace" text-anchor="middle">10°</text>
+        <text x="280" y="192" fill="#475569" font-size="9.5" font-family="monospace" text-anchor="middle">40°</text>
+        <text x="178" y="210" fill="#64748b" font-size="10" font-family="system-ui" text-anchor="middle">Launch Angle (°)</text>
+
+        <!-- Sweet Spot zone box — no text inside -->
+        <rect x="146" y="10" width="72" height="84" rx="4"
+          fill="rgba(34,197,94,0.05)"
+          stroke="rgba(34,197,94,0.28)"
+          stroke-width="1"
+          stroke-dasharray="5,4"/>
+
+        <!-- Callout line: from right edge of zone (218, 52) → label anchor (316, 38) -->
+        <line x1="218" y1="52" x2="314" y2="38" stroke="rgba(74,222,128,0.35)" stroke-width="1" stroke-dasharray="3,3"/>
+        <circle cx="218" cy="52" r="2" fill="rgba(74,222,128,0.4)"/>
+
+        <!-- Label: outside chart area to the right, stacked two lines, clear of everything -->
+        <text x="316" y="32" fill="rgba(74,222,128,0.75)" font-size="9" font-family="system-ui" font-weight="600">Sweet Spot</text>
+        <text x="316" y="44" fill="rgba(74,222,128,0.45)" font-size="8" font-family="system-ui">8–32° · ≥95 mph</text>
+
+        <!-- Scatter dots (clipped) -->
+        <g clip-path="url(#cp3)">
+          <!-- Outs -->
+          <circle cx="70"  cy="148" r="3.2" fill="#1e293b" stroke="#3d5068" stroke-width="0.8" opacity="0.9"/>
+          <circle cx="60"  cy="160" r="3.2" fill="#1e293b" stroke="#3d5068" stroke-width="0.8" opacity="0.9"/>
+          <circle cx="82"  cy="154" r="3.2" fill="#1e293b" stroke="#3d5068" stroke-width="0.8" opacity="0.9"/>
+          <circle cx="55"  cy="170" r="3.2" fill="#1e293b" stroke="#3d5068" stroke-width="0.8" opacity="0.9"/>
+          <circle cx="95"  cy="145" r="3.2" fill="#1e293b" stroke="#3d5068" stroke-width="0.8" opacity="0.9"/>
+          <circle cx="265" cy="155" r="3.2" fill="#1e293b" stroke="#3d5068" stroke-width="0.8" opacity="0.9"/>
+          <circle cx="278" cy="148" r="3.2" fill="#1e293b" stroke="#3d5068" stroke-width="0.8" opacity="0.9"/>
+          <circle cx="255" cy="162" r="3.2" fill="#1e293b" stroke="#3d5068" stroke-width="0.8" opacity="0.9"/>
+          <circle cx="125" cy="140" r="3.2" fill="#1e293b" stroke="#3d5068" stroke-width="0.8" opacity="0.9"/>
+          <circle cx="138" cy="148" r="3.2" fill="#1e293b" stroke="#3d5068" stroke-width="0.8" opacity="0.9"/>
+          <circle cx="230" cy="120" r="3.2" fill="#1e293b" stroke="#3d5068" stroke-width="0.8" opacity="0.9"/>
+          <!-- Singles -->
+          <circle cx="148" cy="100" r="4.2" fill="#4ade80" opacity="0.75"/>
+          <circle cx="165" cy="92"  r="4.2" fill="#4ade80" opacity="0.75"/>
+          <circle cx="192" cy="96"  r="4.2" fill="#4ade80" opacity="0.75"/>
+          <circle cx="118" cy="114" r="4.2" fill="#4ade80" opacity="0.75"/>
+          <circle cx="105" cy="122" r="4.2" fill="#4ade80" opacity="0.75"/>
+          <circle cx="240" cy="105" r="4.2" fill="#4ade80" opacity="0.75"/>
+          <!-- XBH -->
+          <circle cx="158" cy="66"  r="5"   fill="#fb923c" opacity="0.82"/>
+          <circle cx="178" cy="58"  r="5"   fill="#fb923c" opacity="0.82"/>
+          <circle cx="204" cy="70"  r="5"   fill="#fb923c" opacity="0.82"/>
+          <!-- HRs -->
+          <circle cx="168" cy="24"  r="6.5" fill="#f87171" opacity="0.92"/>
+          <circle cx="188" cy="18"  r="6.5" fill="#f87171" opacity="0.92"/>
+          <circle cx="152" cy="20"  r="6.5" fill="#f87171" opacity="0.92"/>
+          <circle cx="210" cy="28"  r="6.5" fill="#f87171" opacity="0.92"/>
+        </g>
+      </svg>
+
+      <div style="display:flex;gap:18px;margin-top:12px;justify-content:center;align-items:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          <svg width="13" height="13"><circle cx="6.5" cy="6.5" r="6.5" fill="#f87171"/></svg>
+          <span style="color:#94a3b8;font-size:10px;font-family:system-ui">Home Run</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <svg width="11" height="11"><circle cx="5.5" cy="5.5" r="5.5" fill="#fb923c"/></svg>
+          <span style="color:#94a3b8;font-size:10px;font-family:system-ui">XBH</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <svg width="9" height="9"><circle cx="4.5" cy="4.5" r="4.5" fill="#4ade80"/></svg>
+          <span style="color:#94a3b8;font-size:10px;font-family:system-ui">Single</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <svg width="8" height="8"><circle cx="4" cy="4" r="3.5" fill="#1e293b" stroke="#475569" stroke-width="0.8"/></svg>
+          <span style="color:#94a3b8;font-size:10px;font-family:system-ui">Out</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

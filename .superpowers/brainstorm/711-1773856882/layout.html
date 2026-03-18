@@ -1,0 +1,158 @@
+<h2>Dashboard Layout</h2>
+<p class="subtitle">Here's how the focused analytics tool will be structured. Click to select if this looks right.</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)" style="width:100%;max-width:900px">
+    <div class="letter">A</div>
+    <div class="content" style="width:100%">
+      <h3>Sidebar + Main Content</h3>
+
+      <div style="display:flex;gap:16px;margin-top:16px;font-family:monospace;font-size:12px">
+
+        <!-- Sidebar -->
+        <div style="width:200px;background:#1e293b;border-radius:8px;padding:12px;flex-shrink:0">
+          <div style="color:#94a3b8;font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Player Search</div>
+          <div style="display:flex;gap:4px;margin-bottom:6px">
+            <div style="flex:1;background:#334155;border-radius:4px;padding:4px 6px;color:#e2e8f0;font-size:11px">First</div>
+            <div style="flex:1;background:#334155;border-radius:4px;padding:4px 6px;color:#e2e8f0;font-size:11px">Last</div>
+          </div>
+          <div style="background:#2563eb;border-radius:4px;padding:5px;text-align:center;color:white;font-size:11px;margin-bottom:10px">🔍 Search</div>
+          <div style="background:#334155;border-radius:4px;padding:5px;color:#e2e8f0;font-size:11px;margin-bottom:12px">▾ Shohei Ohtani</div>
+
+          <div style="color:#94a3b8;font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Analytics Mode</div>
+          <div style="display:flex;gap:4px;margin-bottom:12px">
+            <div style="flex:1;background:#2563eb;border-radius:4px;padding:4px;text-align:center;color:white;font-size:10px">Batting</div>
+            <div style="flex:1;background:#334155;border-radius:4px;padding:4px;text-align:center;color:#94a3b8;font-size:10px">Pitching</div>
+          </div>
+
+          <div style="color:#94a3b8;font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Season</div>
+          <div style="background:#334155;border-radius:4px;padding:5px;color:#e2e8f0;font-size:11px;margin-bottom:6px">▾ 2024</div>
+          <div style="display:flex;gap:4px;margin-bottom:12px">
+            <div style="flex:1;background:#334155;border-radius:4px;padding:4px 6px;color:#64748b;font-size:10px">Apr 1</div>
+            <div style="flex:1;background:#334155;border-radius:4px;padding:4px 6px;color:#64748b;font-size:10px">Oct 1</div>
+          </div>
+
+          <div style="background:#16a34a;border-radius:4px;padding:6px;text-align:center;color:white;font-size:11px">⚡ Load Data</div>
+        </div>
+
+        <!-- Main content -->
+        <div style="flex:1">
+          <!-- Title -->
+          <div style="color:#f1f5f9;font-size:14px;font-weight:600;margin-bottom:10px">
+            Shohei Ohtani — Batting Analytics
+            <span style="color:#64748b;font-size:11px;font-weight:normal;margin-left:8px">Apr 1 – Oct 1, 2024</span>
+          </div>
+
+          <!-- Metric cards -->
+          <div style="display:flex;gap:8px;margin-bottom:12px">
+            <div style="flex:1;background:#1e293b;border-radius:6px;padding:8px;text-align:center">
+              <div style="color:#64748b;font-size:9px;text-transform:uppercase">Avg Exit Velo</div>
+              <div style="color:#f1f5f9;font-size:18px;font-weight:700">91.4 mph</div>
+            </div>
+            <div style="flex:1;background:#1e293b;border-radius:6px;padding:8px;text-align:center">
+              <div style="color:#64748b;font-size:9px;text-transform:uppercase">Max Exit Velo</div>
+              <div style="color:#f1f5f9;font-size:18px;font-weight:700">118.2 mph</div>
+            </div>
+            <div style="flex:1;background:#1e293b;border-radius:6px;padding:8px;text-align:center">
+              <div style="color:#64748b;font-size:9px;text-transform:uppercase">Barrel %</div>
+              <div style="color:#f1f5f9;font-size:18px;font-weight:700">14.2%</div>
+            </div>
+            <div style="flex:1;background:#1e293b;border-radius:6px;padding:8px;text-align:center">
+              <div style="color:#64748b;font-size:9px;text-transform:uppercase">xwOBA</div>
+              <div style="color:#f1f5f9;font-size:18px;font-weight:700">.410</div>
+            </div>
+          </div>
+
+          <!-- Charts grid 2x2 -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+            <div style="background:#1e293b;border-radius:6px;padding:10px;height:130px">
+              <div style="color:#94a3b8;font-size:10px;margin-bottom:6px">Exit Velocity Distribution</div>
+              <div style="display:flex;align-items:flex-end;gap:2px;height:80px;padding-top:10px">
+                <div style="flex:1;background:#334155;height:20%"></div>
+                <div style="flex:1;background:#334155;height:35%"></div>
+                <div style="flex:1;background:#2563eb;height:65%"></div>
+                <div style="flex:1;background:#2563eb;height:90%"></div>
+                <div style="flex:1;background:#2563eb;height:100%"></div>
+                <div style="flex:1;background:#2563eb;height:85%"></div>
+                <div style="flex:1;background:#334155;height:45%"></div>
+                <div style="flex:1;background:#334155;height:20%"></div>
+              </div>
+            </div>
+            <div style="background:#1e293b;border-radius:6px;padding:10px;height:130px">
+              <div style="color:#94a3b8;font-size:10px;margin-bottom:6px">Launch Angle vs Exit Velocity</div>
+              <div style="height:80px;position:relative;overflow:hidden">
+                <div style="position:absolute;top:5px;left:30%;width:35%;height:60%;border:1px dashed #22c55e;border-radius:4px;background:rgba(34,197,94,0.05)"></div>
+                <div style="position:absolute;top:15px;left:20%;width:6px;height:6px;background:#22c55e;border-radius:50%"></div>
+                <div style="position:absolute;top:30px;left:45%;width:6px;height:6px;background:#ef4444;border-radius:50%"></div>
+                <div style="position:absolute;top:10px;left:55%;width:6px;height:6px;background:#22c55e;border-radius:50%"></div>
+                <div style="position:absolute;top:50px;left:35%;width:6px;height:6px;background:#94a3b8;border-radius:50%"></div>
+                <div style="position:absolute;top:20px;left:65%;width:6px;height:6px;background:#ef4444;border-radius:50%"></div>
+                <div style="position:absolute;top:5px;left:10px;color:#22c55e;font-size:8px">Sweet Spot</div>
+              </div>
+            </div>
+            <div style="background:#1e293b;border-radius:6px;padding:10px;height:130px">
+              <div style="color:#94a3b8;font-size:10px;margin-bottom:6px">Spray Chart</div>
+              <div style="height:80px;position:relative;overflow:hidden">
+                <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:35px solid transparent;border-right:35px solid transparent;border-bottom:70px solid rgba(51,65,85,0.4)"></div>
+                <div style="position:absolute;top:5px;left:30%;width:5px;height:5px;background:#ef4444;border-radius:50%"></div>
+                <div style="position:absolute;top:15px;left:60%;width:5px;height:5px;background:#22c55e;border-radius:50%"></div>
+                <div style="position:absolute;top:25px;left:45%;width:5px;height:5px;background:#22c55e;border-radius:50%"></div>
+                <div style="position:absolute;top:35px;left:20%;width:5px;height:5px;background:#94a3b8;border-radius:50%"></div>
+                <div style="position:absolute;top:40px;left:70%;width:5px;height:5px;background:#22c55e;border-radius:50%"></div>
+              </div>
+            </div>
+            <div style="background:#1e293b;border-radius:6px;padding:10px;height:130px">
+              <div style="color:#94a3b8;font-size:10px;margin-bottom:6px">Rolling xwOBA Trend</div>
+              <div style="height:80px;display:flex;align-items:center">
+                <svg width="100%" height="60" viewBox="0 0 200 60">
+                  <polyline points="0,50 30,40 60,35 90,30 120,25 150,32 180,20 200,18" fill="none" stroke="#2563eb" stroke-width="2"/>
+                  <line x1="0" y1="38" x2="200" y2="38" stroke="#f97316" stroke-width="1" stroke-dasharray="4"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom row: 2 more charts -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="background:#1e293b;border-radius:6px;padding:10px;height:80px">
+              <div style="color:#94a3b8;font-size:10px;margin-bottom:4px">Pitch Types Faced</div>
+              <div style="display:flex;align-items:center;gap:8px;height:50px">
+                <div style="width:40px;height:40px;border-radius:50%;background:conic-gradient(#2563eb 0% 40%, #7c3aed 40% 65%, #059669 65% 80%, #d97706 80% 100%)"></div>
+                <div style="font-size:9px;color:#94a3b8;line-height:1.6">
+                  <div><span style="color:#2563eb">■</span> 4-Seam FB 40%</div>
+                  <div><span style="color:#7c3aed">■</span> Slider 25%</div>
+                  <div><span style="color:#059669">■</span> Sinker 15%</div>
+                </div>
+              </div>
+            </div>
+            <div style="background:#1e293b;border-radius:6px;padding:10px;height:80px">
+              <div style="color:#94a3b8;font-size:10px;margin-bottom:4px">Hit Distance by Type</div>
+              <div style="display:flex;align-items:flex-end;gap:6px;height:50px;padding-top:6px">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+                  <div style="width:20px;background:#22c55e;height:20px;border-radius:2px"></div>
+                  <div style="font-size:8px;color:#64748b">1B</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+                  <div style="width:20px;background:#eab308;height:30px;border-radius:2px"></div>
+                  <div style="font-size:8px;color:#64748b">2B</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+                  <div style="width:20px;background:#f97316;height:35px;border-radius:2px"></div>
+                  <div style="font-size:8px;color:#64748b">3B</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+                  <div style="width:20px;background:#ef4444;height:42px;border-radius:2px"></div>
+                  <div style="font-size:8px;color:#64748b">HR</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:20px;color:#64748b;font-size:13px">
+  Pitching mode swaps in: Pitch Usage, Velocity by Type, Movement Profile, Spin Rate, Release Point, Velocity Trend
+</div>

@@ -287,6 +287,71 @@ def batting_spray_chart(df: pd.DataFrame) -> go.Figure:
     return fig
 
 
+def batting_pitch_types_faced(df: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+    if "pitch_type" not in df.columns or df.empty:
+        return fig.update_layout(**_base_layout("Pitch Types Faced"))
+
+    counts = df["pitch_type"].dropna().map(lambda p: PITCH_NAMES.get(p, p)).value_counts()
+    if counts.empty:
+        return fig.update_layout(**_base_layout("Pitch Types Faced"))
+
+    fig.add_trace(go.Pie(
+        labels=counts.index.tolist(),
+        values=counts.values.tolist(),
+        hole=0.4,
+        textposition="outside",
+        textinfo="label+percent",
+        textfont=dict(size=9, color="#94a3b8"),
+        marker=dict(colors=THEME["pitch_colors"][:len(counts)]),
+        showlegend=False,
+    ))
+
+    layout = _base_layout("Pitch Types Faced")
+    layout["margin"] = dict(l=40, r=40, t=40, b=40)
+    fig.update_layout(**layout)
+    return fig
+
+
+def batting_hit_distance(df: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+    needed = {"hit_distance_sc", "events"}
+    if not needed.issubset(df.columns) or df.empty:
+        return fig.update_layout(**_base_layout("Hit Distance by Outcome"))
+
+    hit_events = ["single", "double", "triple", "home_run"]
+    colors = [
+        OUTCOME_COLORS["single"],
+        THEME["xbh"],
+        THEME["xbh"],
+        OUTCOME_COLORS["home_run"],
+    ]
+
+    data = df[df["events"].isin(hit_events) & df["hit_distance_sc"].notna()]
+    if data.empty:
+        return fig.update_layout(**_base_layout("Hit Distance by Outcome"))
+
+    for event, color in zip(hit_events, colors):
+        sub = data[data["events"] == event]["hit_distance_sc"]
+        if sub.empty:
+            continue
+        fig.add_trace(go.Box(
+            y=sub,
+            name=event.replace("_", " ").title(),
+            marker_color=color,
+            line_color=color,
+            boxmean=True,
+            hovertemplate="%{y:.0f} ft<extra></extra>",
+        ))
+
+    layout = _base_layout("Hit Distance by Outcome")
+    layout["xaxis"]["title"] = dict(text="Hit Type", font=dict(size=10, color=THEME["axis_title"]))
+    layout["yaxis"]["title"] = dict(text="Distance (ft)", font=dict(size=10, color=THEME["axis_title"]))
+    layout["showlegend"] = False
+    fig.update_layout(**layout)
+    return fig
+
+
 def batting_xwoba_trend(df: pd.DataFrame) -> go.Figure:
     fig = go.Figure()
     col = "estimated_woba_using_speedangle"

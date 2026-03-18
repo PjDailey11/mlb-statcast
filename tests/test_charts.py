@@ -83,3 +83,25 @@ def test_batting_xwoba_trend_has_ref_line(batting_df):
     import pytest
     fig = charts.batting_xwoba_trend(batting_df)
     assert any(abs(s.y0 - 0.320) < 0.001 for s in fig.layout.shapes)
+
+
+def test_batting_pitch_types_faced_returns_figure(batting_df):
+    fig = charts.batting_pitch_types_faced(batting_df)
+    assert isinstance(fig, go.Figure)
+    assert len(fig.data) >= 1
+
+
+def test_batting_hit_distance_returns_figure(batting_df):
+    fig = charts.batting_hit_distance(batting_df)
+    assert isinstance(fig, go.Figure)
+
+
+def test_batting_hit_distance_only_hit_events(batting_df):
+    fig = charts.batting_hit_distance(batting_df)
+    if fig.data:
+        x_vals = set()
+        for trace in fig.data:
+            if hasattr(trace, "name") and trace.name is not None:
+                x_vals.add(trace.name)
+        allowed = {"Single", "Double", "Triple", "Home Run", ""}
+        assert x_vals.issubset(allowed)

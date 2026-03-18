@@ -69,6 +69,13 @@ def _label_pitch_types(series: pd.Series) -> pd.Series:
 
 
 def transform_spray_coords(df: pd.DataFrame) -> pd.DataFrame:
+    """Center Statcast hit coordinates so home plate is near the origin.
+
+    Statcast hc_x / hc_y are raw pixel coordinates from a 250x250 field image.
+    125.42 and 198.27 are the empirically-derived home-plate pixel offsets.
+    After transformation: negative spray_x = pull side, positive = oppo; spray_y
+    increases toward the outfield.
+    """
     out = df.copy()
     out["spray_x"] = df["hc_x"] - 125.42
     out["spray_y"] = 198.27 - df["hc_y"]
@@ -86,8 +93,10 @@ def compute_batting_metrics(df: pd.DataFrame) -> dict:
     ev = df["launch_speed"] if "launch_speed" in df.columns else pd.Series(dtype=float)
     xwoba_col = df["estimated_woba_using_speedangle"] if "estimated_woba_using_speedangle" in df.columns else pd.Series(dtype=float)
     barrel_pct = None
-    if "barrel" in df.columns and len(df) > 0:
-        barrel_pct = df["barrel"].sum() / len(df) * 100
+    if "barrel" in df.columns:
+        valid_barrels = df["barrel"].dropna()
+        if len(valid_barrels) > 0:
+            barrel_pct = valid_barrels.sum() / len(valid_barrels) * 100
     return {
         "avg_ev": round(ev.mean(), 1) if not ev.empty else None,
         "max_ev": round(ev.max(), 1) if not ev.empty else None,

@@ -480,3 +480,92 @@ def batting_xwoba_trend(df: pd.DataFrame) -> go.Figure:
     layout["showlegend"] = False
     fig.update_layout(**layout)
     return fig
+
+
+def pitching_spin_rate(df: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+    needed = {"release_spin_rate", "pitch_type"}
+    if not needed.issubset(df.columns) or df.empty:
+        return fig.update_layout(**_base_layout("Spin Rate by Pitch Type"))
+
+    df2 = df[df["release_spin_rate"].notna() & df["pitch_type"].notna()].copy()
+    df2["pitch_label"] = _label_pitch_types(df2["pitch_type"])
+
+    for i, label in enumerate(df2["pitch_label"].unique()):
+        sub = df2[df2["pitch_label"] == label]["release_spin_rate"]
+        color = THEME["pitch_colors"][i % len(THEME["pitch_colors"])]
+        fig.add_trace(go.Box(
+            y=sub, name=label,
+            marker_color=color, line_color=color,
+            boxmean=True,
+            hovertemplate="%{y:.0f} rpm<extra></extra>",
+        ))
+
+    layout = _base_layout("Spin Rate by Pitch Type")
+    layout["xaxis"]["title"] = dict(text="Pitch Type", font=dict(size=10, color=THEME["axis_title"]))
+    layout["yaxis"]["title"] = dict(text="Spin Rate (rpm)", font=dict(size=10, color=THEME["axis_title"]))
+    layout["showlegend"] = False
+    fig.update_layout(**layout)
+    return fig
+
+
+def pitching_release_point(df: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+    needed = {"release_pos_x", "release_pos_z", "pitch_type"}
+    if not needed.issubset(df.columns) or df.empty:
+        return fig.update_layout(**_base_layout("Release Point"))
+
+    df2 = df[df["release_pos_x"].notna() & df["release_pos_z"].notna()].copy()
+    df2["pitch_label"] = _label_pitch_types(df2["pitch_type"])
+
+    for i, label in enumerate(df2["pitch_label"].unique()):
+        sub = df2[df2["pitch_label"] == label]
+        color = THEME["pitch_colors"][i % len(THEME["pitch_colors"])]
+        fig.add_trace(go.Scatter(
+            x=sub["release_pos_x"], y=sub["release_pos_z"],
+            mode="markers",
+            marker=dict(color=color, size=5, opacity=0.6),
+            name=label,
+            hovertemplate="H: %{x:.2f} ft<br>V: %{y:.2f} ft<extra></extra>",
+        ))
+
+    layout = _base_layout("Release Point")
+    layout["xaxis"]["title"] = dict(text="Horizontal Release (ft)", font=dict(size=10, color=THEME["axis_title"]))
+    layout["yaxis"]["title"] = dict(text="Vertical Release (ft)", font=dict(size=10, color=THEME["axis_title"]))
+    fig.update_layout(**layout)
+    return fig
+
+
+def pitching_velocity_trend(df: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+    needed = {"release_speed", "pitch_type", "game_date"}
+    if not needed.issubset(df.columns) or df.empty:
+        return fig.update_layout(**_base_layout("Velocity Trend"))
+
+    df2 = df[df["release_speed"].notna() & df["pitch_type"].notna()].copy()
+    df2["pitch_label"] = _label_pitch_types(df2["pitch_type"])
+    df2["game_date"] = pd.to_datetime(df2["game_date"])
+
+    daily = (
+        df2.groupby(["game_date", "pitch_label"])["release_speed"]
+        .mean()
+        .reset_index()
+    )
+
+    for i, label in enumerate(daily["pitch_label"].unique()):
+        sub = daily[daily["pitch_label"] == label].sort_values("game_date")
+        color = THEME["pitch_colors"][i % len(THEME["pitch_colors"])]
+        fig.add_trace(go.Scatter(
+            x=sub["game_date"], y=sub["release_speed"],
+            mode="lines+markers",
+            line=dict(color=color, width=1.8),
+            marker=dict(color=color, size=4),
+            name=label,
+            hovertemplate="%{x|%b %d}: %{y:.1f} mph<extra></extra>",
+        ))
+
+    layout = _base_layout("Velocity Trend by Pitch Type")
+    layout["xaxis"]["title"] = dict(text="Date", font=dict(size=10, color=THEME["axis_title"]))
+    layout["yaxis"]["title"] = dict(text="Avg Velocity (mph)", font=dict(size=10, color=THEME["axis_title"]))
+    fig.update_layout(**layout)
+    return fig

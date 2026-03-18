@@ -128,3 +128,20 @@ def test_pitching_movement_profile_returns_figure(pitching_df):
 def test_pitching_movement_profile_has_crosshairs(pitching_df):
     fig = charts.pitching_movement_profile(pitching_df)
     assert len(fig.layout.shapes) >= 2
+
+
+def test_pitching_spin_rate_returns_figure(pitching_df):
+    fig = charts.pitching_spin_rate(pitching_df)
+    assert isinstance(fig, go.Figure)
+
+
+def test_pitching_release_point_returns_figure(pitching_df):
+    fig = charts.pitching_release_point(pitching_df)
+    assert isinstance(fig, go.Figure)
+    assert len(fig.data) >= 1
+
+
+def test_pitching_velocity_trend_returns_figure(pitching_df):
+    fig = charts.pitching_velocity_trend(pitching_df)
+    assert isinstance(fig, go.Figure)
+    assert len(fig.data) >= 1

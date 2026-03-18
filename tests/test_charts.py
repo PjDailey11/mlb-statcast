@@ -60,3 +60,26 @@ def test_batting_launch_ev_scatter_returns_figure(batting_df):
 def test_batting_launch_ev_scatter_has_sweet_spot_shape(batting_df):
     fig = charts.batting_launch_ev_scatter(batting_df)
     assert len(fig.layout.shapes) >= 1
+
+
+def test_batting_spray_chart_returns_figure(batting_df):
+    fig = charts.batting_spray_chart(batting_df)
+    assert isinstance(fig, go.Figure)
+    assert len(fig.data) >= 2
+
+
+def test_batting_spray_chart_has_diamond_shape(batting_df):
+    fig = charts.batting_spray_chart(batting_df)
+    assert len(fig.layout.shapes) >= 1
+
+
+def test_batting_xwoba_trend_returns_figure(batting_df):
+    fig = charts.batting_xwoba_trend(batting_df)
+    assert isinstance(fig, go.Figure)
+    assert len(fig.data) >= 1
+
+
+def test_batting_xwoba_trend_has_ref_line(batting_df):
+    import pytest
+    fig = charts.batting_xwoba_trend(batting_df)
+    assert any(abs(s.y0 - 0.320) < 0.001 for s in fig.layout.shapes)

@@ -219,3 +219,102 @@ def batting_launch_ev_scatter(df: pd.DataFrame) -> go.Figure:
     layout["yaxis"]["tickvals"] = [70, 95, 115]
     fig.update_layout(**layout)
     return fig
+
+
+def batting_spray_chart(df: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=[-250, 0, 250], y=[350, 0, 350],
+        mode="lines", line=dict(color="rgba(100,116,139,0.3)", width=1),
+        showlegend=False, hoverinfo="skip",
+    ))
+
+    theta = np.linspace(np.radians(45), np.radians(135), 80)
+    r = 370
+    fig.add_trace(go.Scatter(
+        x=r * np.cos(theta), y=r * np.sin(theta),
+        mode="lines", line=dict(color="rgba(100,116,139,0.2)", width=1),
+        showlegend=False, hoverinfo="skip",
+    ))
+
+    fig.add_shape(
+        type="path",
+        path="M 0 0 L -63.5 63.5 L 0 127 L 63.5 63.5 Z",
+        fillcolor="rgba(250,204,21,0.04)",
+        line=dict(color="rgba(250,204,21,0.38)", width=1.2),
+    )
+
+    needed = {"hc_x", "hc_y"}
+    if not needed.issubset(df.columns) or df.empty:
+        return fig.update_layout(**_base_layout("Spray Chart"))
+
+    spray = transform_spray_coords(df[df["hc_x"].notna() & df["hc_y"].notna()].copy())
+    if spray.empty:
+        return fig.update_layout(**_base_layout("Spray Chart"))
+
+    for label, color, size, events_filter in [
+        ("Out",  THEME["out_fill"],         5, None),
+        ("Hit",  OUTCOME_COLORS["single"],  6, ["single", "double", "triple"]),
+        ("HR",   OUTCOME_COLORS["home_run"],  8, ["home_run"]),
+    ]:
+        if events_filter is None:
+            mask = ~spray["events"].isin(["home_run", "single", "double", "triple"])
+        else:
+            mask = spray["events"].isin(events_filter)
+        sub = spray[mask]
+        if sub.empty:
+            continue
+        fig.add_trace(go.Scatter(
+            x=sub["spray_x"], y=sub["spray_y"],
+            mode="markers",
+            marker=dict(
+                color=color, size=size, opacity=0.8,
+                line=dict(color=THEME["axis"], width=0.5) if label == "Out" else dict(width=0),
+            ),
+            name=label,
+            hovertemplate="x: %{x:.0f}<br>y: %{y:.0f}<extra></extra>",
+        ))
+
+    layout = _base_layout("Spray Chart")
+    layout["xaxis"].update(range=[-270, 270], showgrid=False, zeroline=False,
+                           showticklabels=False)
+    layout["xaxis"]["title"] = dict(text="← Pull · Center · Oppo →",
+                                    font=dict(size=9, color=THEME["axis_title"]))
+    layout["yaxis"].update(range=[-30, 430], showgrid=False, zeroline=False,
+                           showticklabels=False, scaleanchor="x")
+    fig.update_layout(**layout)
+    return fig
+
+
+def batting_xwoba_trend(df: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+    col = "estimated_woba_using_speedangle"
+    if col not in df.columns or df.empty:
+        return fig.update_layout(**_base_layout("Rolling xwOBA (30 PA)"))
+
+    pa = df[df[col].notna()].copy().sort_values("game_date")
+    if pa.empty:
+        return fig.update_layout(**_base_layout("Rolling xwOBA (30 PA)"))
+
+    pa["rolling"] = pa[col].rolling(30, min_periods=5).mean()
+
+    fig.add_trace(go.Scatter(
+        x=pa["game_date"], y=pa["rolling"],
+        mode="lines",
+        line=dict(color="#2563eb", width=2),
+        name="Rolling xwOBA",
+        hovertemplate="%{x|%b %d}: %{y:.3f}<extra></extra>",
+    ))
+
+    fig.add_hline(y=0.320, line_dash="dash", line_color=THEME["ref_line"], line_width=1,
+                  annotation_text="Lg Avg (~.320)",
+                  annotation_position="bottom right",
+                  annotation_font=dict(size=9, color=THEME["ref_line"]))
+
+    layout = _base_layout("Rolling xwOBA (30 PA)")
+    layout["xaxis"]["title"] = dict(text="Date", font=dict(size=10, color=THEME["axis_title"]))
+    layout["yaxis"]["title"] = dict(text="xwOBA", font=dict(size=10, color=THEME["axis_title"]))
+    layout["showlegend"] = False
+    fig.update_layout(**layout)
+    return fig
